@@ -1,0 +1,25 @@
+# --- Dependencias (Nunca se suben) ---
+node_modules/
+/package-lock.json  # Opcional: A veces se sube, a veces no. Para proyectos escolares, puedes ignorarlo si te da conflictos, pero lo profesional es subirlo. Yo te recomiendo NO ponerlo aquí y sí subirlo.
+
+# --- Seguridad (CRÍTICO) ---
+.env
+
+# --- Archivos de Sistema Operativo (Basura) ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Logs de errores ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Editor / IDE (Opcional) ---
+.vscode/
+.idea/
+
+# --- Angular (Para cuando hagamos el frontend) ---
+.angular/
+dist/
