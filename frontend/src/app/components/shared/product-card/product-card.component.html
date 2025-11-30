@@ -27,3 +27,11 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de Ingredientes -->
+<app-ingredient-modal
+  *ngIf="showIngredientModal"
+  [product]="product"
+  (close)="onIngredientModalClose()"
+  (confirmed)="onIngredientConfirmed($event)"
+></app-ingredient-modal>

@@ -164,4 +164,46 @@ export class OrderService {
   getCurrentState(): OrderState {
     return this.orderState.value;
   }
+
+  // NUEVO MÉTODO: Agregar producto con personalización
+  addItemWithCustomization(product: Producto, especificaciones: string = ''): void {
+    console.log('➕ Agregando producto personalizado:', product, 'Especificaciones:', especificaciones);
+
+    const precioNumerico = this.parsePrice(product.precio);
+    this.productsMap.set(product.id, product);
+
+    const currentState = this.orderState.value;
+    const existingItemIndex = currentState.items.findIndex(
+      item => item.id_producto === product.id && item.especificaciones === especificaciones
+    );
+
+    let newItems: CartItem[];
+
+    if (existingItemIndex > -1) {
+      // Producto con las mismas especificaciones ya existe - incrementar cantidad
+      newItems = [...currentState.items];
+      const currentQuantity = newItems[existingItemIndex].cantidad;
+      newItems[existingItemIndex] = {
+        ...newItems[existingItemIndex],
+        cantidad: currentQuantity + 1,
+        subtotal: (currentQuantity + 1) * precioNumerico
+      };
+      console.log('📈 Incrementando cantidad del producto personalizado:', product.nombre);
+    } else {
+      // Nuevo producto con personalización
+      const newItem: CartItem = {
+        id_producto: product.id,
+        nombre: product.nombre,
+        precio: precioNumerico,
+        cantidad: 1,
+        especificaciones: especificaciones,
+        subtotal: precioNumerico
+      };
+      newItems = [...currentState.items, newItem];
+      console.log('🆕 Nuevo producto personalizado agregado:', product.nombre, 'Especificaciones:', especificaciones);
+    }
+
+    this.updateState(newItems);
+  }
 }
+

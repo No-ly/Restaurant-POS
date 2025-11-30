@@ -45,3 +45,32 @@ export const createProducto = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
+export const getProductIngredients = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        
+        if (!productId) {
+            return res.status(400).json({ error: 'ID de producto requerido' });
+        }
+
+        const [rows] = await pool.execute(`
+            SELECT 
+                i.id,
+                i.nombre,
+                i.precio_extra,
+                pi.cantidad_default,
+                pi.es_modificable,
+                CASE WHEN pi.cantidad_default > 0 THEN 1 ELSE 0 END as es_default
+            FROM Ingredientes i
+            INNER JOIN Producto_Ingredientes pi ON i.id = pi.id_ingrediente
+            WHERE pi.id_producto = ?
+            ORDER BY i.nombre
+        `, [productId]);
+
+        res.json(rows);
+    } catch (error) {
+        console.error('Error obteniendo ingredientes del producto:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};

@@ -56,3 +56,18 @@ export interface OrderState {
   tax: number;
   total: number;
 }
+
+export interface IngredienteProducto {
+  id: number;
+  nombre: string;
+  precio_extra: number;
+  cantidad_default: number;
+  es_modificable: boolean;
+  es_default: boolean;
+  seleccionado?: boolean; // Para el frontend
+}
+
+export interface ProductoPersonalizado extends Producto {
+  especificaciones?: string;
+  ingredientesPersonalizados?: IngredienteProducto[];
+}
