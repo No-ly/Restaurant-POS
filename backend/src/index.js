@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import pool from './db.js';
 import categoriasRoutes from './routes/categorias.routes.js';
 import productosRoutes from './routes/productos.routes.js';
+import usuariosRoutes from './routes/usuarios.routes.js';
+import ingredientesRoutes from './routes/ingredientes.routes.js';
+
 
 dotenv.config();
 
@@ -34,6 +37,8 @@ app.get('/ping', async (req, res) => {
 // Rutas de la API
 app.use('/api/categorias', categoriasRoutes);
 app.use('/api/productos', productosRoutes);
+app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/ingredientes', ingredientesRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => {
