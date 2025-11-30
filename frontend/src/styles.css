@@ -1,1 +1,136 @@
-/* You can add global styles to this file, and also import other style files */
+/* === IMPORTACIÓN DE FUENTES PREMIUM === */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap');
+
+/* === VARIABLES DE COLOR Y DISEÑO === */
+:root {
+  --primary: #B85C38;
+  --primary-dark: #9A4A2B;
+  --secondary: #222831;
+  --secondary-light: #393E46;
+  --accent: #D9A349;
+  --accent-light: #E6B85C;
+  --bg-light: #F7F4EF;
+  --text-main: #2D2B2D;
+  --text-light: #5A5656;
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* === RESET Y CONFIGURACIÓN BASE === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+    background-color: var(--bg-light);
+    /* Agregamos estas "manchas" de luz para que el vidrio tenga qué deformar */
+    background-image:
+        radial-gradient(circle at 0% 0%, rgba(184, 92, 56, 0.5) 0%, transparent 40%), /* Mancha Terracota esq. sup. */
+        radial-gradient(circle at 100% 0%, rgba(217, 163, 73, 0.5) 0%, transparent 40%), /* Mancha Oro esq. sup. */
+        radial-gradient(circle at 100% 100%, rgba(34, 40, 49, 0.15) 0%, transparent 50%); /* Sombra Gris abajo */
+    background-attachment: fixed; /* Para que el fondo no se mueva */
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* === CLASES UTILITARIAS DE DISEÑO === */
+
+/* Panel de Vidrio Premium */
+.glass-panel {
+  /* Fondo blanco pero MUY transparente (solo 15%) */
+    background: rgba(255, 255, 255, 0.15);
+
+    /* El desenfoque fuerte */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); /* Para Safari */
+
+    /* El borde es CLAVE: Blanco semitransparente para simular el grosor del cristal */
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    /* Sombra para despegarlo del fondo */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+
+    border-radius: 16px; /* Bordes redondeados modernos */
+}
+
+/* Efecto de Elevación 3D al Hover */
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 32px rgba(31, 38, 135, 0.2);
+}
+
+/* Texto con Degradado Elegante */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Botones Premium */
+.btn-premium {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(184, 92, 56, 0.3);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(184, 92, 56, 0.4);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
+/* Animaciones Fluidas */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Scroll Personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--primary), var(--accent));
+  border-radius: 10px;
+}
