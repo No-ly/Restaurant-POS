@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
 import { ProductCardComponent } from '../../shared/product-card/product-card.component';
 import { Categoria, Producto } from '../../../interfaces/api.interface';
+import { TicketSummaryComponent } from '../../shared/ticket-summary/ticket-summary.component';
 import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-menu-selection',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCardComponent, TicketSummaryComponent],
   templateUrl: './menu-selection.component.html',
   styleUrls: ['./menu-selection.component.css']
 })

@@ -1,21 +1,2 @@
-<div class="container-fluid p-5" style="background-color: var(--secondary); min-height: 100vh;">
-  <div class="row align-items-center">
-
-    <!-- Columna Izquierda: Prueba de Vidrio -->
-    <div class="col-md-7">
-      <app-glass-card class="p-5 d-block text-center">
-        <h1 class="text-white fw-bold mb-3" style="font-family: 'Poppins'">Bienvenido al Sistema</h1>
-        <p class="text-white mb-4">Este panel tiene efecto Glassmorphism y desenfoque.</p>
-        <button class="btn btn-warning fw-bold px-4 py-2 card-hover-effect">
-          <i class="fas fa-utensils me-2"></i> Ver Menú
-        </button>
-      </app-glass-card>
-    </div>
-
-    <!-- Columna Derecha: Prueba del Ticket -->
-    <div class="col-md-4 offset-md-1">
-      <app-ticket-summary class="card-hover-effect"></app-ticket-summary>
-    </div>
-
-  </div>
-</div>
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>

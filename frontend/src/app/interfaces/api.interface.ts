@@ -71,3 +71,21 @@ export interface ProductoPersonalizado extends Producto {
   especificaciones?: string;
   ingredientesPersonalizados?: IngredienteProducto[];
 }
+
+export interface ItemCocina {
+  id_producto: number;
+  nombre_producto: string;
+  cantidad: number;
+  especificaciones: string;
+  estado_preparacion: string;
+}
+
+export interface PedidoCocina {
+  id: number;
+  mesa: string;
+  fecha: string;
+  fecha_formateada: string;
+  total: number;
+  estado: string;
+  items: ItemCocina[];
+}

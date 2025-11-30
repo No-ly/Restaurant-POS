@@ -1,0 +1,92 @@
+<div class="kitchen-container">
+  <!-- Header -->
+  <div class="kitchen-header">
+    <h1 class="kitchen-title">
+      <i class="fas fa-utensils me-3"></i>
+      VISTA DE COCINA
+    </h1>
+    <div class="kitchen-info">
+      <span class="badge total-orders">{{ pedidos.length }} ÓRDENES PENDIENTES</span>
+      <span class="last-update">Actualizado: {{ currentTime }}</span>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3">Cargando órdenes...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !loading" class="error-container">
+    <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+    <h4>Error cargando pedidos</h4>
+    <p>{{ error }}</p>
+    <button class="btn btn-retry" (click)="cargarPedidos()">
+      <i class="fas fa-redo me-2"></i>Reintentar
+    </button>
+  </div>
+
+  <!-- Grid de Pedidos -->
+  <div *ngIf="!loading && !error" class="pedidos-grid">
+
+    <!-- Mensaje si no hay pedidos -->
+    <div *ngIf="pedidos.length === 0" class="no-orders">
+      <i class="fas fa-check-circle fa-4x mb-4"></i>
+      <h3>¡TODO AL DÍA!</h3>
+      <p>No hay órdenes pendientes en cocina</p>
+    </div>
+
+    <!-- Tarjetas de Pedidos -->
+    <div *ngFor="let pedido of pedidos"
+         class="pedido-card"
+         [class.para-llevar]="esParaLlevar(pedido.mesa)">
+
+      <!-- Header de la Tarjeta -->
+      <div class="pedido-header">
+        <div class="pedido-info">
+          <h3 class="pedido-mesa">{{ pedido.mesa }}</h3>
+          <span class="pedido-hora">{{ pedido.fecha_formateada }}</span>
+        </div>
+        <div class="pedido-badges">
+          <span class="badge"
+                [class.badge-llevar]="esParaLlevar(pedido.mesa)"
+                [class.badge-mesa]="!esParaLlevar(pedido.mesa)">
+            {{ esParaLlevar(pedido.mesa) ? 'PARA LLEVAR' : 'MESA' }}
+          </span>
+          <span class="badge badge-id">#{{ pedido.id }}</span>
+        </div>
+      </div>
+
+      <!-- Items del Pedido -->
+      <div class="pedido-items">
+        <div *ngFor="let item of pedido.items"
+             class="item-row"
+             [class.con-especificaciones]="tieneEspecificaciones(item.especificaciones)">
+
+          <span class="item-cantidad">{{ item.cantidad }}x</span>
+          <span class="item-nombre">{{ item.nombre_producto }}</span>
+
+          <!-- Especificaciones -->
+          <div *ngIf="tieneEspecificaciones(item.especificaciones)"
+               class="item-especificaciones">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            {{ item.especificaciones }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer con Botón -->
+      <div class="pedido-footer">
+        <button class="btn-completar"
+                (click)="completarPedido(pedido.id)">
+          <i class="fas fa-check me-2"></i>
+          ORDEN LISTA
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
-import { Categoria, Producto, Usuario, Ingrediente, PedidoRequest,  IngredienteProducto } from '../interfaces/api.interface';
+import { Categoria, Producto, Usuario, Ingrediente, PedidoRequest,  IngredienteProducto, PedidoCocina } from '../interfaces/api.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,14 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/pedidos`, pedido);
   }
 
+  getPedidosPendientes(): Observable<PedidoCocina[]> {
+    return this.http.get<PedidoCocina[]>(`${this.baseUrl}/pedidos/pendientes`);
+  }
+
+  completarPedido(id: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/pedidos/${id}/completar`, {});
+  }
+
 getProductIngredients(productId: number): Observable<IngredienteProducto[]> {
   return this.http.get<any[]>(`${this.baseUrl}/productos/${productId}/ingredientes`).pipe(
     map(ingredientesData => {
@@ -56,5 +64,5 @@ getProductIngredients(productId: number): Observable<IngredienteProducto[]> {
   );
 }
 
-  
+
 }

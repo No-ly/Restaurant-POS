@@ -6,6 +6,8 @@
 
   <!-- Formulario de Datos del Pedido -->
   <div class="pedido-form" *ngIf="orderState.items.length > 0">
+
+    <!-- Dropdown de Mesero -->
     <div class="form-group">
       <label for="usuarioSelect" class="form-label">
         <i class="fas fa-user me-2"></i>¿Quién atiende?
@@ -23,20 +25,24 @@
       </select>
     </div>
 
+    <!-- Dropdown de Mesa - NUEVO -->
     <div class="form-group">
-      <label for="mesaInput" class="form-label">
+      <label for="mesaSelect" class="form-label">
         <i class="fas fa-utensils me-2"></i>Número de Mesa
       </label>
-      <input
-        id="mesaInput"
-        type="text"
-        class="form-control"
-        placeholder="Ej: 1, 2, 3..."
-        [(ngModel)]="mesaNumber"
+      <select
+        id="mesaSelect"
+        class="form-select"
+        [(ngModel)]="selectedMesa"
         [disabled]="isProcessing"
-        maxlength="10"
       >
+        <option value="">Selecciona una mesa</option>
+        <option *ngFor="let mesa of mesas" [value]="mesa">
+          {{ mesa }}
+        </option>
+      </select>
     </div>
+
   </div>
 
   <!-- Items del carrito -->
@@ -47,9 +53,16 @@
         <span class="item-name">{{ item.nombre }}</span>
         <span class="item-price">{{ '$' + (item.precio * item.cantidad).toFixed(2) }}</span>
       </div>
+
+      <!-- Mostrar especificaciones si existen -->
+      <div class="item-details" *ngIf="item.especificaciones && item.especificaciones.trim() !== ''">
+        <small class="text-muted">{{ item.especificaciones }}</small>
+      </div>
+
       <div class="item-details">
         <small class="text-muted">${{ item.precio.toFixed(2) }} c/u</small>
       </div>
+
       <div class="item-actions">
         <button
           class="btn-action"
@@ -115,20 +128,20 @@
       <i class="fas fa-broom me-2"></i>
       {{ isProcessing ? 'Procesando...' : 'Limpiar Todo' }}
     </button>
-    <!-- En la sección del botón de pago -->
-<button
-  class="btn-pay btn-premium w-100"
-  [disabled]="!isFormValid()"
-  (click)="processPayment()"
->
-  <i class="fas fa-credit-card me-2"></i>
-  <span *ngIf="isProcessing; else normalText">
-    <i class="fas fa-spinner fa-spin me-2"></i>Procesando Pedido...
-  </span>
-  <ng-template #normalText>
-    Pagar {{ '$' + orderState.total.toFixed(2) }}
-  </ng-template>
-</button>
+
+    <button
+      class="btn-pay btn-premium w-100"
+      [disabled]="!isFormValid()"
+      (click)="processPayment()"
+    >
+      <i class="fas fa-credit-card me-2"></i>
+      <span *ngIf="isProcessing; else normalText">
+        <i class="fas fa-spinner fa-spin me-2"></i>Procesando Pedido...
+      </span>
+      <ng-template #normalText>
+        Pagar {{ '$' + orderState.total.toFixed(2) }}
+      </ng-template>
+    </button>
 
     <!-- Mensaje de validación -->
     <div *ngIf="orderState.items.length > 0 && !isFormValid() && !isProcessing"

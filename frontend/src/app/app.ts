@@ -1,38 +1,24 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { GlassCardComponent } from './components/shared/glass-card/glass-card.component';
-import { TicketSummaryComponent } from './components/shared/ticket-summary/ticket-summary.component';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './components/shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    GlassCardComponent,
-    TicketSummaryComponent
-  ],
+  imports: [CommonModule, RouterOutlet, RouterModule, NavbarComponent],
   template: `
-    <div class="container-fluid">
-      <!-- Header -->
-      <app-glass-card [padding]="'1.5rem'" [customClass]="'mb-4 rounded-0'">
-        <div class="row align-items-center">
-          <div class="col">
-            <h1 class="text-gradient mb-0">🍽️ Restaurant POS</h1>
-          </div>
-          <div class="col-auto">
-            <app-ticket-summary></app-ticket-summary>
-          </div>
-        </div>
-      </app-glass-card>
-
-      <!-- Contenido Principal -->
+    <app-navbar></app-navbar>
+    <main class="main-content">
       <router-outlet></router-outlet>
-    </div>
+    </main>
   `,
-  styleUrls: ['./app.css']
+  styles: [`
+    .main-content {
+      min-height: calc(100vh - 80px);
+    }
+  `]
 })
 export class AppComponent {
-  title = 'restaurant-pos';
+  title = 'frontend';
 }

@@ -1,46 +1,56 @@
 <div class="menu-container">
+  <div class="main-layout">
+    <!-- Contenido principal del Menú -->
+    <div class="menu-content">
 
-  <!-- Loading State -->
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </div>
-    <p class="mt-2 text-muted">Cargando menú...</p>
-  </div>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 text-muted">Cargando menú...</p>
+      </div>
 
-  <!-- Contenido Principal -->
-  <div *ngIf="!loading">
+      <!-- Contenido Principal -->
+      <div *ngIf="!loading">
 
-    <!-- Carrusel Circular SIMPLIFICADO -->
-    <div class="categories-section mb-5">
-      <h4 class="text-center mb-4 text-secondary">Selecciona una Categoría</h4>
-      <div class="categories-container">
-        <div
-          *ngFor="let categoria of categorias"
-          class="category-item"
-          [class.active]="categoria.id === selectedCategory?.id"
-          (click)="selectCategory(categoria)"
-        >
-          <div class="category-content">
-            {{ categoria.nombre }}
+        <!-- Carrusel Circular SIMPLIFICADO -->
+        <div class="categories-section mb-5">
+          <h4 class="text-center mb-4 text-secondary">Selecciona una Categoría</h4>
+          <div class="categories-container">
+            <div
+              *ngFor="let categoria of categorias"
+              class="category-item"
+              [class.active]="categoria.id === selectedCategory?.id"
+              (click)="selectCategory(categoria)"
+            >
+              <div class="category-content">
+                {{ categoria.nombre }}
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- Grid de Productos -->
+        <div class="products-grid">
+          <app-product-card
+            *ngFor="let product of filteredProducts"
+            [product]="product"
+          ></app-product-card>
+
+          <!-- Mensaje si no hay productos -->
+          <div *ngIf="filteredProducts.length === 0" class="no-products-message">
+            <i class="fas fa-utensils fa-2x mb-2"></i>
+            <p class="mb-0">No hay productos en esta categoría</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Grid de Productos -->
-    <div class="products-grid">
-      <app-product-card
-        *ngFor="let product of filteredProducts"
-        [product]="product"
-      ></app-product-card>
-
-      <!-- Mensaje si no hay productos -->
-      <div *ngIf="filteredProducts.length === 0" class="no-products-message">
-        <i class="fas fa-utensils fa-2x mb-2"></i>
-        <p class="mb-0">No hay productos en esta categoría</p>
-      </div>
+    <!-- Sidebar del Ticket -->
+    <div class="ticket-sidebar">
+      <app-ticket-summary></app-ticket-summary>
     </div>
-
   </div>
 </div>

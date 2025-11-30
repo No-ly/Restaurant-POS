@@ -94,3 +94,44 @@
     flex-shrink: 0;
   }
 }
+
+.menu-container {
+  min-height: 100vh;
+  background: var(--bg-light);
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px; /* Menú | Ticket */
+  gap: 0;
+  min-height: calc(100vh - 80px); /* Restar altura de navbar */
+}
+
+.ticket-sidebar {
+  background: white;
+  border-left: 1px solid #e0e0e0;
+  height: calc(100vh - 80px);
+  position: sticky;
+  top: 80px;
+  overflow-y: auto;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+}
+
+.menu-content {
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+}
+
+/* Mantén todos tus estilos existentes de categories-section, products-grid, etc. */
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-sidebar {
+    display: none;
+  }
+}

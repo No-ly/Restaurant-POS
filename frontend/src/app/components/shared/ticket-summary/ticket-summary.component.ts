@@ -23,8 +23,9 @@ export class TicketSummaryComponent implements OnInit, OnDestroy {
   };
 
   usuarios: Usuario[] = [];
+  mesas: string[] = []; // Nuevo array para mesas
   selectedUsuarioId: number = 0;
-  mesaNumber: string = '';
+  selectedMesa: string = ''; // Cambiado de mesaNumber a selectedMesa
   isProcessing: boolean = false;
 
   private subscription!: Subscription;
@@ -41,6 +42,7 @@ export class TicketSummaryComponent implements OnInit, OnDestroy {
     });
 
     this.loadUsuarios();
+    this.generarMesas(); // Generar lista de mesas
   }
 
   ngOnDestroy() {
@@ -60,6 +62,16 @@ export class TicketSummaryComponent implements OnInit, OnDestroy {
         alert('Error al cargar la lista de meseros');
       }
     });
+  }
+
+  // Generar lista de mesas disponibles
+  generarMesas() {
+    this.mesas = [
+      'Mesa 1', 'Mesa 2', 'Mesa 3', 'Mesa 4', 'Mesa 5', 'Mesa 6',
+      'Mesa 7', 'Mesa 8', 'Mesa 9', 'Mesa 10', 'Mesa 11', 'Mesa 12',
+      'Mesa 13', 'Mesa 14', 'Mesa 15', 'Para Llevar', 'Mostrador'
+    ];
+    console.log('🪑 Mesas generadas:', this.mesas);
   }
 
   addQuantity(productId: number) {
@@ -82,14 +94,14 @@ export class TicketSummaryComponent implements OnInit, OnDestroy {
   isFormValid(): boolean {
     return this.orderState.items.length > 0 &&
            this.selectedUsuarioId > 0 &&
-           this.mesaNumber.trim() !== '' &&
+           this.selectedMesa.trim() !== '' &&
            !this.isProcessing;
   }
 
   resetForm() {
     this.selectedUsuarioId = 0;
-    this.mesaNumber = '';
-    this.isProcessing = false; // ← Asegurar reset del estado de procesamiento
+    this.selectedMesa = '';
+    this.isProcessing = false;
     console.log('🔄 Formulario reseteado');
   }
 
@@ -101,25 +113,19 @@ export class TicketSummaryComponent implements OnInit, OnDestroy {
 
     this.isProcessing = true;
     console.log('🔄 Iniciando procesamiento de pago...');
-console.log('🔍 DIAGNÓSTICO DE TOTALES:', {
-    subtotal: this.orderState.subtotal,
-    iva: this.orderState.tax,
-    totalEnviado: this.orderState.total,
-    calculoManual: this.orderState.subtotal + this.orderState.tax,
-    iguales: this.orderState.total === (this.orderState.subtotal + this.orderState.tax)
-  });
 
-  const pedidoData = {
-    id_usuario: this.selectedUsuarioId,
-    mesa: `Mesa ${this.mesaNumber}`,
-    total: this.orderState.total,
-    items: this.orderState.items.map(item => ({
-      id_producto: item.id_producto,
-      cantidad: item.cantidad,
-      precio_unitario: item.precio,
-      especificaciones: item.especificaciones || ''
-    }))
-  };
+    // Preparar datos para el backend
+    const pedidoData = {
+      id_usuario: this.selectedUsuarioId,
+      mesa: this.selectedMesa, // ← Ahora usa selectedMesa
+      total: this.orderState.total,
+      items: this.orderState.items.map(item => ({
+        id_producto: item.id_producto,
+        cantidad: item.cantidad,
+        precio_unitario: item.precio,
+        especificaciones: item.especificaciones || ''
+      }))
+    };
 
     console.log('📤 Enviando pedido al backend:', pedidoData);
 
@@ -133,7 +139,7 @@ console.log('🔍 DIAGNÓSTICO DE TOTALES:', {
 
         // Limpiar carrito y formulario
         this.orderService.clearOrder();
-        this.resetForm(); // ← Esto ahora resetea isProcessing a false
+        this.resetForm();
 
         console.log('✅ Procesamiento completado, estado reseteado');
       },
@@ -151,5 +157,10 @@ console.log('🔍 DIAGNÓSTICO DE TOTALES:', {
   getSelectedUsuarioName(): string {
     const usuario = this.usuarios.find(u => u.id === this.selectedUsuarioId);
     return usuario ? usuario.nombre : 'Seleccionar mesero';
+  }
+
+  // Nuevo método para obtener el nombre de la mesa seleccionada
+  getSelectedMesaName(): string {
+    return this.selectedMesa || 'Seleccionar mesa';
   }
 }
