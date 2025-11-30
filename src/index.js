@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import pool from './db.js';
+import categoriasRoutes from './routes/categorias.routes.js';
+import productosRoutes from './routes/productos.routes.js';
 
 dotenv.config();
 
@@ -28,6 +30,10 @@ app.get('/ping', async (req, res) => {
         });
     }
 });
+
+// Rutas de la API
+app.use('/api/categorias', categoriasRoutes);
+app.use('/api/productos', productosRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => {
