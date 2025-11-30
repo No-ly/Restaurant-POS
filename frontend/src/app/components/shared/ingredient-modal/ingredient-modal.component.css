@@ -301,7 +301,7 @@
 }
 
 .price-line.extras {
-  color: #3b82f6; /* ← Azul para extras */
+  color: #e4d74a; /* ← Azul para extras */
   font-weight: 600;
 }
 
@@ -414,4 +414,60 @@
   .ingredient-label {
     font-size: 0.9rem;
   }
+
+  /* ... (mantén todo lo anterior) ... */
+
+/* PRECIO BASE - Gris Carbón */
+.base-price {
+  color: #eaeac7 !important; /* Gris Carbón */
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* PRECIO FINAL - Oro Suave */
+.final-price {
+  color: #D9A349 !important; /* Oro Suave */
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* EXTRAS ADICIONALES - Terracota */
+.price-line.extras {
+  color: #B85C38 !important; /* Terracota Profunda */
+  font-weight: 600;
+}
+
+/* TOTAL A PAGAR - Oro Suave con énfasis */
+.price-line.total {
+  border-top: 2px solid #D9A349; /* Oro Suave */
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 1.2rem;
+  color: #D9A349 !important; /* Oro Suave */
+  font-weight: 700;
+}
+
+/* BOTÓN PRINCIPAL - Terracota */
+.btn-primary {
+  background: #B85C38 !important; /* Terracota Profunda */
+  color: white !important;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #9A4A2D !important; /* Terracota más oscuro */
+  transform: translateY(-2px);
+}
+
+/* BADGE DE EXTRAS - Terracota */
+.extra-badge {
+  background: #B85C38 !important; /* Terracota Profunda */
+  color: white !important;
+}
+
+/* PRECIO DE EXTRAS - Oro Suave */
+.extra-price {
+  color: #D9A349 !important; /* Oro Suave */
+  font-weight: 600;
+}
 }

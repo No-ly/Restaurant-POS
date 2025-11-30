@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+
 import { Categoria, Producto, Usuario, Ingrediente, PedidoRequest,  IngredienteProducto } from '../interfaces/api.interface';
 
 @Injectable({
@@ -31,7 +32,29 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/pedidos`, pedido);
   }
 
-  getProductIngredients(productId: number): Observable<IngredienteProducto[]> {
-    return this.http.get<IngredienteProducto[]>(`${this.baseUrl}/productos/${productId}/ingredientes`);
-  }
+getProductIngredients(productId: number): Observable<IngredienteProducto[]> {
+  return this.http.get<any[]>(`${this.baseUrl}/productos/${productId}/ingredientes`).pipe(
+    map(ingredientesData => {
+      console.log('🔧 Datos crudos de ingredientes:', ingredientesData);
+
+      return ingredientesData.map(item => {
+        // ✅ MAPEO CORRECTO según tu interfaz
+        const ingrediente: IngredienteProducto = {
+          id: item.id_ingrediente || item.id,
+          nombre: item.nombre,
+          precio_extra: Number(item.precio_extra) || 0, // ← CONVERTIR A NÚMERO
+          cantidad_default: item.cantidad_default || 1, // ← Valor por defecto si no viene
+          es_modificable: Boolean(item.es_modificable),
+          es_default: Boolean(item.es_default),
+          seleccionado: Boolean(item.es_default) // Para el frontend
+        };
+
+        console.log('🔄 Ingrediente mapeado:', ingrediente);
+        return ingrediente;
+      });
+    })
+  );
+}
+
+  
 }

@@ -101,19 +101,25 @@ export class TicketSummaryComponent implements OnInit, OnDestroy {
 
     this.isProcessing = true;
     console.log('🔄 Iniciando procesamiento de pago...');
+console.log('🔍 DIAGNÓSTICO DE TOTALES:', {
+    subtotal: this.orderState.subtotal,
+    iva: this.orderState.tax,
+    totalEnviado: this.orderState.total,
+    calculoManual: this.orderState.subtotal + this.orderState.tax,
+    iguales: this.orderState.total === (this.orderState.subtotal + this.orderState.tax)
+  });
 
-    // Preparar datos para el backend
-    const pedidoData = {
-      id_usuario: this.selectedUsuarioId,
-      mesa: `Mesa ${this.mesaNumber}`,
-      total: this.orderState.total,
-      items: this.orderState.items.map(item => ({
-        id_producto: item.id_producto,
-        cantidad: item.cantidad,
-        precio_unitario: item.precio,
-        especificaciones: item.especificaciones || ''
-      }))
-    };
+  const pedidoData = {
+    id_usuario: this.selectedUsuarioId,
+    mesa: `Mesa ${this.mesaNumber}`,
+    total: this.orderState.total,
+    items: this.orderState.items.map(item => ({
+      id_producto: item.id_producto,
+      cantidad: item.cantidad,
+      precio_unitario: item.precio,
+      especificaciones: item.especificaciones || ''
+    }))
+  };
 
     console.log('📤 Enviando pedido al backend:', pedidoData);
 
