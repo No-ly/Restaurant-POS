@@ -1,0 +1,29 @@
+<div
+  class="product-card glass-panel card-hover-effect"
+  (click)="selectProduct()"
+  (mousedown)="isPressed = true"
+  (mouseup)="isPressed = false"
+  (mouseleave)="isPressed = false"
+  [class.pressed]="isPressed"
+>
+  <div class="product-image">
+    <img
+      [src]="getProductImage()"
+      [alt]="product.nombre"
+      class="img-fluid"
+      (error)="onImageError($event)"
+    >
+  </div>
+  <div class="product-info p-3">
+    <h5 class="product-name fw-bold mb-2">{{ product.nombre }}</h5>
+    <p class="product-price mb-0">
+      {{ '$' + product.precio }}
+    </p>
+    <small class="text-muted">{{ product.categoria_nombre }}</small>
+
+    <!-- Badge de cantidad si el producto está en el carrito -->
+    <div *ngIf="getItemQuantity() > 0" class="quantity-badge">
+      {{ getItemQuantity() }}
+    </div>
+  </div>
+</div>

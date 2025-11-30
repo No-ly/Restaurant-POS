@@ -1,0 +1,142 @@
+<div class="ticket-container">
+  <div class="ticket-header">
+    <h3 class="ticket-title">ORDEN ACTUAL</h3>
+    <div class="ticket-date">{{ currentDate | date:'short' }}</div>
+  </div>
+
+  <!-- Formulario de Datos del Pedido -->
+  <div class="pedido-form" *ngIf="orderState.items.length > 0">
+    <div class="form-group">
+      <label for="usuarioSelect" class="form-label">
+        <i class="fas fa-user me-2"></i>¿Quién atiende?
+      </label>
+      <select
+        id="usuarioSelect"
+        class="form-select"
+        [(ngModel)]="selectedUsuarioId"
+        [disabled]="isProcessing"
+      >
+        <option value="0">Selecciona un mesero</option>
+        <option *ngFor="let usuario of usuarios" [value]="usuario.id">
+          {{ usuario.nombre }} ({{ usuario.rol }})
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="mesaInput" class="form-label">
+        <i class="fas fa-utensils me-2"></i>Número de Mesa
+      </label>
+      <input
+        id="mesaInput"
+        type="text"
+        class="form-control"
+        placeholder="Ej: 1, 2, 3..."
+        [(ngModel)]="mesaNumber"
+        [disabled]="isProcessing"
+        maxlength="10"
+      >
+    </div>
+  </div>
+
+  <!-- Items del carrito -->
+  <div class="ticket-items" *ngIf="orderState.items.length > 0; else emptyCart">
+    <div class="ticket-item" *ngFor="let item of orderState.items; let i = index">
+      <div class="item-main">
+        <span class="item-quantity">{{ item.cantidad }}x</span>
+        <span class="item-name">{{ item.nombre }}</span>
+        <span class="item-price">{{ '$' + (item.precio * item.cantidad).toFixed(2) }}</span>
+      </div>
+      <div class="item-details">
+        <small class="text-muted">${{ item.precio.toFixed(2) }} c/u</small>
+      </div>
+      <div class="item-actions">
+        <button
+          class="btn-action"
+          (click)="decreaseQuantity(item.id_producto)"
+          title="Quitar uno"
+          [disabled]="isProcessing"
+        >
+          <i class="fas fa-minus"></i>
+        </button>
+        <button
+          class="btn-action btn-danger"
+          (click)="removeItem(item.id_producto)"
+          title="Eliminar"
+          [disabled]="isProcessing"
+        >
+          <i class="fas fa-trash"></i>
+        </button>
+        <button
+          class="btn-action btn-add"
+          (click)="addQuantity(item.id_producto)"
+          title="Agregar uno"
+          [disabled]="isProcessing"
+        >
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <i class="fas fa-shopping-cart fa-2x mb-3"></i>
+      <p class="mb-0">El carrito está vacío</p>
+      <small class="text-muted">Selecciona productos del menú</small>
+    </div>
+  </ng-template>
+
+  <div class="ticket-divider" *ngIf="orderState.items.length > 0"></div>
+
+  <!-- Totales -->
+  <div class="ticket-totals" *ngIf="orderState.items.length > 0">
+    <div class="total-line">
+      <span>Subtotal:</span>
+      <span>{{ '$' + orderState.subtotal.toFixed(2) }}</span>
+    </div>
+    <div class="total-line">
+      <span>IVA (16%):</span>
+      <span>{{ '$' + orderState.tax.toFixed(2) }}</span>
+    </div>
+    <div class="total-line grand-total">
+      <span>TOTAL:</span>
+      <span class="text-gradient">{{ '$' + orderState.total.toFixed(2) }}</span>
+    </div>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="ticket-actions" *ngIf="orderState.items.length > 0">
+    <button
+      class="btn-clear btn-secondary w-100 mb-2"
+      (click)="clearOrder()"
+      [disabled]="isProcessing"
+    >
+      <i class="fas fa-broom me-2"></i>
+      {{ isProcessing ? 'Procesando...' : 'Limpiar Todo' }}
+    </button>
+    <!-- En la sección del botón de pago -->
+<button
+  class="btn-pay btn-premium w-100"
+  [disabled]="!isFormValid()"
+  (click)="processPayment()"
+>
+  <i class="fas fa-credit-card me-2"></i>
+  <span *ngIf="isProcessing; else normalText">
+    <i class="fas fa-spinner fa-spin me-2"></i>Procesando Pedido...
+  </span>
+  <ng-template #normalText>
+    Pagar {{ '$' + orderState.total.toFixed(2) }}
+  </ng-template>
+</button>
+
+    <!-- Mensaje de validación -->
+    <div *ngIf="orderState.items.length > 0 && !isFormValid() && !isProcessing"
+         class="validation-message text-center mt-2">
+      <small class="text-warning">
+        <i class="fas fa-exclamation-circle me-1"></i>
+        Completa los datos del pedido para continuar
+      </small>
+    </div>
+  </div>
+</div>

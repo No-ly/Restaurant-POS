@@ -5,20 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-glass-card',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div
-      class="glass-panel card-hover-effect animate-fade-in-up"
-      [class]="customClass"
-      [style.padding]="padding"
-    >
-      <ng-content></ng-content>
-    </div>
-  `,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `]
+  templateUrl: './glass-card.component.html',
+  styleUrls: ['./glass-card.component.css']
 })
 export class GlassCardComponent {
   @Input() padding: string = '1.5rem';

@@ -1,171 +1,149 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { OrderService } from '../../../services/order.service';
+import { ApiService } from '../../../services/api.service';
+import { OrderState, CartItem, Usuario } from '../../../interfaces/api.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ticket-summary',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="ticket-container">
-      <div class="ticket-header">
-        <h3 class="ticket-title">ORDEN #001</h3>
-        <div class="ticket-date">{{ getFormattedDate() }}</div>
-      </div>
-
-      <div class="ticket-items">
-        <div class="ticket-item" *ngFor="let item of sampleItems">
-          <span class="item-quantity">{{ item.quantity }}x</span>
-          <span class="item-name">{{ item.name }}</span>
-          <span class="item-price">\${{ item.price }}</span>
-        </div>
-      </div>
-
-      <div class="ticket-divider"></div>
-
-      <div class="ticket-totals">
-        <div class="total-line">
-          <span>Subtotal:</span>
-          <span>\${{ calculateSubtotal() }}</span>
-        </div>
-        <div class="total-line">
-          <span>IVA (16%):</span>
-          <span>\${{ calculateIVA() }}</span>
-        </div>
-        <div class="total-line grand-total">
-          <span>TOTAL:</span>
-          <span class="text-gradient">\${{ calculateTotal() }}</span>
-        </div>
-      </div>
-
-      <button class="btn-pay btn-premium w-100 mt-3">
-        <i class="fas fa-credit-card me-2"></i>Pagar Ahora
-      </button>
-    </div>
-  `,
-  styles: [`
-    .ticket-container {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      font-family: 'Courier Prime', monospace;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      position: relative;
-      max-width: 320px;
-      margin: 0 auto;
-    }
-
-    .ticket-container::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 10px;
-      right: 10px;
-      height: 20px;
-      background:
-        radial-gradient(circle at 10px 0, transparent 10px, white 11px) 0 0 / 20px 100%,
-        radial-gradient(circle at 10px 0, transparent 10px, white 11px) 10px 0 / 20px 100%;
-      background-repeat: repeat-x;
-    }
-
-    .ticket-header {
-      text-align: center;
-      border-bottom: 2px dashed #e0e0e0;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .ticket-title {
-      font-weight: 700;
-      color: var(--secondary);
-      margin-bottom: 0.25rem;
-    }
-
-    .ticket-date {
-      font-size: 0.8rem;
-      color: var(--text-light);
-    }
-
-    .ticket-items {
-      margin-bottom: 1rem;
-    }
-
-    .ticket-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px dotted #e0e0e0;
-    }
-
-    .item-quantity {
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .item-name {
-      flex: 1;
-      margin: 0 0.5rem;
-    }
-
-    .item-price {
-      font-weight: 700;
-    }
-
-    .ticket-divider {
-      height: 1px;
-      background: linear-gradient(to right, transparent, #e0e0e0, transparent);
-      margin: 1rem 0;
-    }
-
-    .total-line {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-    }
-
-    .grand-total {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 2px solid var(--accent);
-    }
-
-    .btn-pay {
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.1rem;
-      padding: 12px;
-    }
-  `]
+  imports: [CommonModule, FormsModule],
+  templateUrl: './ticket-summary.component.html',
+  styleUrls: ['./ticket-summary.component.css']
 })
-export class TicketSummaryComponent {
+export class TicketSummaryComponent implements OnInit, OnDestroy {
   currentDate = new Date();
+  orderState: OrderState = {
+    items: [],
+    subtotal: 0,
+    tax: 0,
+    total: 0
+  };
 
-  sampleItems = [
-    { quantity: 1, name: 'Hamburguesa Clásica', price: 120 },
-    { quantity: 1, name: 'Coca-Cola', price: 35 },
-    { quantity: 2, name: 'Papas Fritas', price: 45 }
-  ];
+  usuarios: Usuario[] = [];
+  selectedUsuarioId: number = 0;
+  mesaNumber: string = '';
+  isProcessing: boolean = false;
 
-  getFormattedDate(): string {
-    return this.currentDate.toLocaleString('es-MX', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  private subscription!: Subscription;
+
+  constructor(
+    private orderService: OrderService,
+    private apiService: ApiService
+  ) {}
+
+  ngOnInit() {
+    this.subscription = this.orderService.orderState$.subscribe(state => {
+      this.orderState = state;
+      console.log('🎫 Estado del carrito actualizado:', state);
+    });
+
+    this.loadUsuarios();
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  loadUsuarios() {
+    this.apiService.getUsuarios().subscribe({
+      next: (usuarios) => {
+        this.usuarios = usuarios;
+        console.log('👥 Usuarios cargados:', usuarios);
+      },
+      error: (error) => {
+        console.error('❌ Error cargando usuarios:', error);
+        alert('Error al cargar la lista de meseros');
+      }
     });
   }
 
-  calculateSubtotal(): number {
-    return this.sampleItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+  addQuantity(productId: number) {
+    this.orderService.addQuantity(productId);
   }
 
-  calculateIVA(): number {
-    return this.calculateSubtotal() * 0.16;
+  decreaseQuantity(productId: number) {
+    this.orderService.removeItem(productId);
   }
 
-  calculateTotal(): number {
-    return this.calculateSubtotal() + this.calculateIVA();
+  removeItem(productId: number) {
+    this.orderService.deleteItem(productId);
+  }
+
+  clearOrder() {
+    this.orderService.clearOrder();
+    this.resetForm();
+  }
+
+  isFormValid(): boolean {
+    return this.orderState.items.length > 0 &&
+           this.selectedUsuarioId > 0 &&
+           this.mesaNumber.trim() !== '' &&
+           !this.isProcessing;
+  }
+
+  resetForm() {
+    this.selectedUsuarioId = 0;
+    this.mesaNumber = '';
+    this.isProcessing = false; // ← Asegurar reset del estado de procesamiento
+    console.log('🔄 Formulario reseteado');
+  }
+
+  processPayment() {
+    if (!this.isFormValid()) {
+      alert('❌ Completa todos los campos requeridos');
+      return;
+    }
+
+    this.isProcessing = true;
+    console.log('🔄 Iniciando procesamiento de pago...');
+
+    // Preparar datos para el backend
+    const pedidoData = {
+      id_usuario: this.selectedUsuarioId,
+      mesa: `Mesa ${this.mesaNumber}`,
+      total: this.orderState.total,
+      items: this.orderState.items.map(item => ({
+        id_producto: item.id_producto,
+        cantidad: item.cantidad,
+        precio_unitario: item.precio,
+        especificaciones: item.especificaciones || ''
+      }))
+    };
+
+    console.log('📤 Enviando pedido al backend:', pedidoData);
+
+    // Llamar al servicio API
+    this.apiService.createPedido(pedidoData).subscribe({
+      next: (response) => {
+        console.log('✅ Pedido guardado exitosamente:', response);
+
+        // Mostrar confirmación
+        alert(`🎉 ¡Pedido #${response.id_pedido} procesado exitosamente!\nTotal: $${this.orderState.total.toFixed(2)}`);
+
+        // Limpiar carrito y formulario
+        this.orderService.clearOrder();
+        this.resetForm(); // ← Esto ahora resetea isProcessing a false
+
+        console.log('✅ Procesamiento completado, estado reseteado');
+      },
+      error: (error) => {
+        console.error('❌ Error al procesar pedido:', error);
+        alert(`❌ Error al procesar el pedido: ${error.error?.message || error.message}`);
+
+        // IMPORTANTE: Resetear el estado de procesamiento en caso de error
+        this.isProcessing = false;
+        console.log('❌ Procesamiento fallido, estado reseteado');
+      }
+    });
+  }
+
+  getSelectedUsuarioName(): string {
+    const usuario = this.usuarios.find(u => u.id === this.selectedUsuarioId);
+    return usuario ? usuario.nombre : 'Seleccionar mesero';
   }
 }

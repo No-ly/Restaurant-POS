@@ -38,3 +38,21 @@ export interface PedidoRequest {
   total: number;
   items: PedidoItem[];
 }
+
+// ... interfaces existentes ...
+
+export interface CartItem {
+  id_producto: number;
+  nombre: string;
+  precio: number;
+  cantidad: number;
+  especificaciones?: string;
+  subtotal: number;
+}
+
+export interface OrderState {
+  items: CartItem[];
+  subtotal: number;
+  tax: number;
+  total: number;
+}
