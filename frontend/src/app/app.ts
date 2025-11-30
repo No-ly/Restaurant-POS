@@ -14,16 +14,24 @@ import { TicketSummaryComponent } from './components/shared/ticket-summary/ticke
     TicketSummaryComponent
   ],
   template: `
-    <div class="container my-4">
-      <app-glass-card [padding]="'2rem'" [customClass]="'mb-4'">
-        <h1 class="text-gradient text-center">🍽️ Restaurant POS</h1>
-        <p class="text-center text-muted">Sistema de Punto de Venta</p>
+    <div class="container-fluid">
+      <!-- Header -->
+      <app-glass-card [padding]="'1.5rem'" [customClass]="'mb-4 rounded-0'">
+        <div class="row align-items-center">
+          <div class="col">
+            <h1 class="text-gradient mb-0">🍽️ Restaurant POS</h1>
+          </div>
+          <div class="col-auto">
+            <app-ticket-summary></app-ticket-summary>
+          </div>
+        </div>
       </app-glass-card>
 
-      <app-ticket-summary></app-ticket-summary>
+      <!-- Contenido Principal -->
+      <router-outlet></router-outlet>
     </div>
   `,
-  styleUrls: ['./app.css']  // Cambié a app.css que sí existe
+  styleUrls: ['./app.css']
 })
 export class AppComponent {
   title = 'restaurant-pos';
