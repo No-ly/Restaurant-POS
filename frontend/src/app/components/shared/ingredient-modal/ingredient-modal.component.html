@@ -1,9 +1,17 @@
-<div class="modal-backdrop" [class.show]="isVisible" (click)="closeModal()">
+<div class="modal-backdrop" [class.show]="isVisible && !isClosing" [class.closing]="isClosing" (click)="onBackdropClick($event)">
   <div class="modal-container glass-panel" (click)="preventClose($event)">
 
     <!-- Header -->
     <div class="modal-header">
-      <h3 class="modal-title text-gradient">Personalizar {{ product?.nombre }}</h3>
+      <div class="modal-title-section">
+        <h3 class="modal-title text-gradient">{{ product?.nombre }}</h3>
+        <div class="modal-price">
+          <span class="base-price">${{ product?.precio }}</span>
+          <span *ngIf="calculateTotalPrice() > parsePrice(product?.precio)" class="final-price">
+            → ${{ calculateTotalPrice().toFixed(2) }}
+          </span>
+        </div>
+      </div>
       <button class="btn-close" (click)="closeModal()">
         <i class="fas fa-times"></i>
       </button>
@@ -22,60 +30,115 @@
 
       <!-- Caso 1: Producto SIN ingredientes personalizables -->
       <div *ngIf="ingredientes.length === 0" class="no-ingredients">
-        <i class="fas fa-info-circle fa-3x mb-3 text-muted"></i>
-        <h5 class="text-secondary">Sin opciones de personalización</h5>
-        <p class="text-muted mb-4">Este producto no tiene ingredientes que se puedan modificar.</p>
+        <i class="fas fa-info-circle fa-3x mb-3 text-accent"></i>
+        <h5 class="text-white">Sin opciones de personalización</h5>
+        <p class="text-light mb-4">Este producto no tiene ingredientes que se puedan modificar.</p>
         <button class="btn btn-primary btn-lg" (click)="addWithoutCustomization()">
           <i class="fas fa-check me-2"></i>
-          Agregar al Pedido
+          Agregar por ${{ product?.precio }}
         </button>
       </div>
 
-      <!-- Caso 2: Producto CON ingredientes personalizables -->
+      <!-- Caso 2: Producto CON ingredientes -->
       <div *ngIf="ingredientes.length > 0">
 
-        <!-- Lista de Ingredientes -->
-        <div class="ingredients-list">
-          <div
-            *ngFor="let ing of ingredientes"
-            class="ingredient-item"
-            [class.non-modifiable]="!ing.es_modificable"
-          >
-            <label class="ingredient-label">
-              <input
-                type="checkbox"
-                [checked]="ing.seleccionado"
-                [disabled]="!ing.es_modificable"
-                (change)="toggleIngredient(ing)"
-                class="ingredient-checkbox"
-              >
-              <span class="ingredient-name">{{ ing.nombre }}</span>
-              <span *ngIf="ing.precio_extra > 0" class="ingredient-price">
-                +${{ ing.precio_extra }}
-              </span>
-              <span *ngIf="!ing.es_modificable" class="ingredient-badge">
-                Obligatorio
-              </span>
-            </label>
-            <div class="ingredient-description">
-              <small class="text-muted">
-                {{ ing.es_default ? 'Incluido por defecto' : 'Opcional' }}
-              </small>
+        <!-- Sección 1: Ingredientes Incluidos (se pueden QUITAR) -->
+        <div *ngIf="getIngredientesDefault().length > 0" class="ingredients-section">
+          <h5 class="section-title">
+            <i class="fas fa-utensils me-2 text-included"></i>
+            Ingredientes Incluidos
+          </h5>
+          <p class="section-description">Puedes quitar lo que no quieras:</p>
+          <div class="ingredients-list">
+            <div
+              *ngFor="let ing of getIngredientesDefault()"
+              class="ingredient-item included"
+            >
+              <label class="ingredient-label">
+                <input
+                  type="checkbox"
+                  [checked]="ing.seleccionado"
+                  [disabled]="!ing.es_modificable"
+                  (change)="toggleIngredient(ing)"
+                  class="ingredient-checkbox"
+                >
+                <span class="ingredient-name">{{ ing.nombre }}</span>
+                <span class="ingredient-badge included-badge">
+                  Incluido
+                </span>
+              </label>
+              <div class="ingredient-description">
+                <small class="text-light">
+                  {{ ing.es_modificable ? 'Puedes quitar' : 'Obligatorio' }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 2: Extras (se pueden AGREGAR con costo) -->
+        <div *ngIf="getIngredientesExtras().length > 0" class="ingredients-section">
+          <h5 class="section-title">
+            <i class="fas fa-plus-circle me-2 text-extra"></i>
+            Agregar Extras
+          </h5>
+          <p class="section-description">Agrega extras con costo adicional:</p>
+          <div class="ingredients-list">
+            <div
+              *ngFor="let ing of getIngredientesExtras()"
+              class="ingredient-item extra"
+            >
+              <label class="ingredient-label">
+                <input
+                  type="checkbox"
+                  [checked]="ing.seleccionado"
+                  (change)="toggleIngredient(ing)"
+                  class="ingredient-checkbox"
+                >
+                <span class="ingredient-name">{{ ing.nombre }}</span>
+                <span *ngIf="ing.precio_extra > 0" class="ingredient-price extra-price">
+                  +${{ ing.precio_extra }}
+                </span>
+                <span class="ingredient-badge extra-badge">
+                  Extra
+                </span>
+              </label>
+              <div class="ingredient-description">
+                <small class="text-light">
+                  {{ ing.precio_extra > 0 ? 'Con costo adicional' : 'Sin costo extra' }}
+                </small>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Resumen de Especificaciones -->
         <div *ngIf="generateEspecificaciones()" class="especificaciones-summary">
-          <h5>Tu pedido será:</h5>
+          <h5>Tu personalización:</h5>
           <p class="especificaciones-text">{{ generateEspecificaciones() }}</p>
+        </div>
+
+        <!-- Resumen de Precio -->
+        <div class="price-summary">
+          <div class="price-line">
+            <span>Precio base:</span>
+            <span>${{ product?.precio }}</span>
+          </div>
+          <div *ngIf="calculateTotalPrice() > parsePrice(product?.precio)" class="price-line extras">
+            <span>Extras adicionales:</span>
+            <span>+${{ (calculateTotalPrice() - parsePrice(product?.precio)).toFixed(2) }}</span>
+          </div>
+          <div class="price-line total">
+            <span><strong>Total a pagar:</strong></span>
+            <span><strong class="text-gradient">${{ calculateTotalPrice().toFixed(2) }}</strong></span>
+          </div>
         </div>
 
       </div>
 
     </div>
 
-    <!-- Footer solo para productos CON ingredientes -->
+    <!-- Footer -->
     <div class="modal-footer" *ngIf="!loading && ingredientes.length > 0">
       <button class="btn btn-secondary" (click)="closeModal()">
         Cancelar
@@ -83,10 +146,9 @@
       <button
         class="btn btn-primary"
         (click)="confirmSelection()"
-        [disabled]="loading"
       >
         <i class="fas fa-check me-2"></i>
-        Agregar al Pedido
+        {{ calculateTotalPrice() > parsePrice(product?.precio) ? 'Agregar con Extras' : 'Agregar al Pedido' }}
       </button>
     </div>
 

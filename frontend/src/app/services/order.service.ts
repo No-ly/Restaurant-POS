@@ -146,7 +146,7 @@ export class OrderService {
   }
 
   // NUEVO MÉTODO: Convertir precio de string a número
-  private parsePrice(price: any): number {
+  public parsePrice(price: any): number {
     if (typeof price === 'number') {
       return price;
     }
