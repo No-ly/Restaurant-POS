@@ -89,3 +89,21 @@ export interface PedidoCocina {
   estado: string;
   items: ItemCocina[];
 }
+
+// Agregar estas interfaces en api.interface.ts
+export interface VentaReciente {
+  id: number;
+  mesa: string;
+  total: number;
+  fecha: string;
+  fecha_formateada: string;
+  mesero: string;
+}
+
+export interface ReporteDiario {
+  totalVentas: number;
+  cantidadPedidos: number;
+  ticketPromedio: number;
+  ultimasVentas: VentaReciente[];
+}
+

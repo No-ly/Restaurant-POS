@@ -1,0 +1,89 @@
+<div class="landing-container">
+  <!-- Fondo Aurora -->
+  <div class="aurora-background"></div>
+
+  <!-- Contenido Principal -->
+  <main class="landing-content">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+
+      <!-- Título Principal con Efecto Fuzzy -->
+      <h1 class="hero-title"
+          [class.focused]="isHovered"
+          (mouseenter)="onMouseEnter()"
+          (mouseleave)="onMouseLeave()">
+        RESTAURANTE POS
+      </h1>
+
+      <!-- Subtítulo -->
+      <p class="hero-subtitle">
+        Sistema de Gestión Gastronómica de Última Generación
+      </p>
+
+      <!-- Botón de Entrada con Texto Circular -->
+      <div class="entry-button-container">
+
+        <!-- Texto Circular Giratorio -->
+        <div class="circular-text">
+          <svg viewBox="0 0 100 100" width="200" height="200">
+            <defs>
+              <path id="circle"
+                    d="M 50, 50
+                       m -37, 0
+                       a 37,37 0 1,1 74,0
+                       a 37,37 0 1,1 -74,0"/>
+            </defs>
+            <text font-size="13" fill="rgba(255,255,255,0.8)">
+              <textPath xlink:href="#circle">
+                • SISTEMA POS • RESTAURANTE • EXPERIENCIA PREMIUM •
+              </textPath>
+            </text>
+          </svg>
+        </div>
+
+        <!-- Botón Central -->
+        <button class="entry-button" (click)="navigateToPOS()">
+          <div class="button-content">
+            <i class="fas fa-utensils button-icon"></i>
+            <span class="button-text">INGRESAR</span>
+          </div>
+          <div class="button-glow"></div>
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- Features Grid -->
+    <section class="features-section">
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">𓌉◯𓇋</div>
+          <h3>Menú Inteligente</h3>
+          <p>Gestiona tu carta con categorías y personalización avanzada</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">♨</div>
+          <h3>Vista Cocina</h3>
+          <p>Órdenes en tiempo real para tu equipo de cocina</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚖︎</div>
+          <h3>Dashboard Avanzado</h3>
+          <p>Reportes y métricas para tomar mejores decisiones</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Minimalista -->
+  <footer class="landing-footer">
+    <p>Sistema desarrollado con tecnología Angular 17+ • Rendimiento premium</p>
+  </footer>
+</div>

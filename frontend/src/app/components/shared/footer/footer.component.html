@@ -1,0 +1,124 @@
+<footer class="footer">
+  <div class="footer-content">
+
+    <!-- Sección 1: Logo y Descripción -->
+    <div class="footer-section">
+      <div class="footer-logo">
+        <i class="fas fa-utensils"></i>
+        <span class="logo-text">RESTAURANTE POS</span>
+      </div>
+      <p class="footer-description">
+        Sistema de punto de venta profesional para restaurantes.
+        Gestiona tu menú, cocina y ventas en una sola plataforma.
+      </p>
+      <div class="footer-contact">
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <span>{{ contacto.telefono }}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>{{ contacto.email }}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>{{ contacto.direccion }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 2: Enlaces Rápidos -->
+    <div class="footer-section">
+      <h3 class="section-title">Enlaces Rápidos</h3>
+      <ul class="footer-links">
+        <!-- Enlaces estáticos sin routerLink -->
+        <li>
+          <a href="#" class="footer-link" (click)="$event.preventDefault()">
+            <i class="fas fa-chevron-right"></i>
+            Soporte Técnico
+          </a>
+        </li>
+        <li>
+          <a href="#" class="footer-link" (click)="$event.preventDefault()">
+            <i class="fas fa-chevron-right"></i>
+            Manual de Usuario
+          </a>
+        </li>
+        <li>
+          <a href="#" class="footer-link" (click)="$event.preventDefault()">
+            <i class="fas fa-chevron-right"></i>
+            Política de Privacidad
+          </a>
+        </li>
+        <li>
+          <a href="#" class="footer-link" (click)="$event.preventDefault()">
+            <i class="fas fa-chevron-right"></i>
+            Términos de Servicio
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Sección 3: Soporte -->
+    <div class="footer-section">
+      <h3 class="section-title">Soporte</h3>
+      <div class="support-info">
+        <div class="support-item">
+          <i class="fas fa-clock"></i>
+          <div class="support-text">
+            <strong>Horario de Soporte</strong>
+            <span>Lun-Vie: 9:00 - 18:00</span>
+            <span>Sáb: 9:00 - 14:00</span>
+          </div>
+        </div>
+        <div class="support-item">
+          <i class="fas fa-headset"></i>
+          <div class="support-text">
+            <strong>Soporte Prioritario</strong>
+            <span>Respuesta en menos de 2 horas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 4: Redes Sociales -->
+    <div class="footer-section">
+      <h3 class="section-title">Síguenos</h3>
+      <div class="social-links">
+        <button
+          *ngFor="let red of redesSociales"
+          class="social-btn"
+          [style.background]="red.color"
+          (click)="abrirEnlace(red.url)"
+          [attr.aria-label]="red.nombre"
+        >
+          <i [class]="red.icon"></i>
+        </button>
+      </div>
+
+      <!-- Botón de Soporte Emergencia -->
+      <div class="emergency-support">
+        <button class="btn-emergency" (click)="abrirEnlace('#')">
+          <i class="fas fa-life-ring"></i>
+          Soporte de Emergencia 24/7
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Línea Separadora -->
+  <div class="footer-divider"></div>
+
+  <!-- Copyright -->
+  <div class="footer-bottom">
+    <div class="copyright">
+      <p>&copy; {{ currentYear }} Restaurante POS. Todos los derechos reservados.</p>
+    </div>
+    <div class="footer-credits">
+      <span>Desarrollado con </span>
+      <i class="fas fa-heart"></i>
+      <span> por el equipo técnico</span>
+    </div>
+  </div>
+</footer>

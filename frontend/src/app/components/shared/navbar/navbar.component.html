@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="nav-brand" routerLink="/" style="cursor: pointer;">
+    <i class="fas fa-utensils me-2"></i>
+    RESTAURANTE POS
+  </div>
+  <div class="nav-links">
+    <a routerLink="/pos" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-home me-1"></i>MENÚ
+    </a>
+    <a routerLink="/cocina" class="nav-link" routerLinkActive="active">
+      <i class="fas fa-utensils me-1"></i>COCINA
+    </a>
+    <a routerLink="/admin" class="nav-link" routerLinkActive="active">
+      <i class="fas fa-chart-line me-1"></i>ADMIN
+    </a>
+  </div>
+</nav>

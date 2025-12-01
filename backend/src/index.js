@@ -7,6 +7,7 @@ import productosRoutes from './routes/productos.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import ingredientesRoutes from './routes/ingredientes.routes.js';
 import pedidosRoutes from './routes/pedidos.routes.js';
+import reportesRoutes from './routes/reportes.routes.js';
 
 
 dotenv.config();
@@ -41,6 +42,7 @@ app.use('/api/productos', productosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/ingredientes', ingredientesRoutes);
 app.use('/api/pedidos', pedidosRoutes);
+app.use('/api/reportes', reportesRoutes);
 
 
 // Iniciar servidor

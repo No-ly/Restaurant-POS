@@ -1,0 +1,295 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--secondary) 0%, #1a1f2e 100%);
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.header-content h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.dashboard-subtitle {
+  color: #E8E2D6;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.btn-refresh {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-refresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Grid de Estadísticas */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Tarjetas Glassmorphism */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.sales-card::before { background: linear-gradient(90deg, #2E8A5F, #4CAF50); }
+.orders-card::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+.average-card::before { background: linear-gradient(90deg, #D9A349, #FFB347); }
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.sales-card .card-icon { color: #4CAF50; }
+.orders-card .card-icon { color: #6366f1; }
+.average-card .card-icon { color: #FFB347; }
+
+.card-title {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  opacity: 0.9;
+}
+
+.card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  line-height: 1;
+}
+
+.card-description {
+  color: #E8E2D6;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.card-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.card-badge.success { background: rgba(46, 138, 95, 0.3); color: #4CAF50; }
+.card-badge.info { background: rgba(59, 130, 246, 0.3); color: #6366f1; }
+.card-badge.warning { background: rgba(217, 163, 73, 0.3); color: #FFB347; }
+
+/* Sección de Últimos Movimientos */
+.recent-activity {
+  margin-top: 2rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.section-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: #E8E2D6;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Tabla Glassmorphism */
+.glass-table-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.recent-transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recent-transactions-table th {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recent-transactions-table td {
+  padding: 1.25rem 1.5rem;
+  color: #E8E2D6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-row {
+  transition: all 0.3s ease;
+}
+
+.table-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.order-id {
+  font-weight: 600;
+  color: white;
+}
+
+.order-time {
+  font-family: 'Courier New', monospace;
+}
+
+.mesa-badge {
+  background: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.mesa-badge.to-go {
+  background: rgba(255, 107, 53, 0.3);
+  color: #FF6B35;
+}
+
+.order-mesero {
+  color: #E8E2D6;
+}
+
+.amount {
+  font-weight: 700;
+  color: #4CAF50;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Estados Especiales */
+.no-transactions {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #E8E2D6;
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: white;
+}
+
+.btn-retry {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .recent-transactions-table {
+    font-size: 0.9rem;
+  }
+
+  .recent-transactions-table th,
+  .recent-transactions-table td {
+    padding: 1rem;
+  }
+}
+
+/* Animaciones de texto gradiente */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

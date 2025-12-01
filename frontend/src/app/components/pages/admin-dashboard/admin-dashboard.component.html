@@ -1,0 +1,156 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="text-gradient">
+        <i class="fas fa-chart-line me-3"></i>
+        Dashboard de Administración
+      </h1>
+      <p class="dashboard-subtitle">Resumen del día - {{ currentDate }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="cargarReporte()" [disabled]="loading">
+        <i class="fas fa-sync-alt" [class.fa-spin]="loading"></i>
+        {{ loading ? 'Actualizando...' : 'Actualizar' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- DEBUG: Agregar esto después del header -->
+<div *ngIf="loading"
+     style="background: #ff4444; color: white; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; text-align: center;">
+  🚨 DEBUG: Loading = {{ loading }} | Animación completada = {{ animacionCompletada }}
+  <button (click)="forzarFinalizacion()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: white; color: #ff4444; border: none; border-radius: 4px; cursor: pointer;">
+    Forzar Finalización
+  </button>
+</div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3">Cargando reporte del día...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+    <h4>Error cargando reporte</h4>
+    <p>{{ error }}</p>
+    <button class="btn-retry" (click)="cargarReporte()">
+      <i class="fas fa-redo me-2"></i>Reintentar
+    </button>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div *ngIf="!loading && !error" class="dashboard-content">
+
+    <!-- Fila Superior: Widgets de Estadísticas -->
+    <div class="stats-grid">
+
+      <!-- Widget: Total Ventas -->
+      <div class="glass-card sales-card">
+        <div class="card-icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Ventas Totales</h3>
+          <div class="card-value text-gradient">
+            {{ formatearMoneda(animatedTotalVentas) }}
+          </div>
+          <p class="card-description">Ingresos del día de hoy</p>
+        </div>
+        <div class="card-badge success">
+          <i class="fas fa-trending-up me-1"></i>
+          Hoy
+        </div>
+      </div>
+
+      <!-- Widget: Cantidad de Pedidos -->
+      <div class="glass-card orders-card">
+        <div class="card-icon">
+          <i class="fas fa-receipt"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Pedidos Realizados</h3>
+          <div class="card-value text-gradient">
+            {{ formatearNumero(animatedCantidadPedidos) }}
+          </div>
+          <p class="card-description">Total de órdenes procesadas</p>
+        </div>
+        <div class="card-badge info">
+          <i class="fas fa-shopping-bag me-1"></i>
+          Actividad
+        </div>
+      </div>
+
+      <!-- Widget: Ticket Promedio -->
+      <div class="glass-card average-card">
+        <div class="card-icon">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Ticket Promedio</h3>
+          <div class="card-value text-gradient">
+            {{ formatearMoneda(animatedTicketPromedio) }}
+          </div>
+          <p class="card-description">Promedio por pedido</p>
+        </div>
+        <div class="card-badge warning">
+          <i class="fas fa-calculator me-1"></i>
+          Promedio
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fila Inferior: Últimos Movimientos -->
+    <div class="recent-activity">
+      <div class="section-header">
+        <h2 class="text-gradient">
+          <i class="fas fa-clock me-2"></i>
+          Últimos Movimientos
+        </h2>
+        <span class="section-badge">{{ reporte.ultimasVentas.length }} transacciones</span>
+      </div>
+
+      <div class="glass-table-container">
+        <table class="recent-transactions-table">
+          <thead>
+            <tr>
+              <th># Orden</th>
+              <th>Hora</th>
+              <th>Mesa</th>
+              <th>Mesero</th>
+              <th class="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let venta of reporte.ultimasVentas" class="table-row">
+              <td class="order-id">#{{ venta.id }}</td>
+              <td class="order-time">{{ venta.fecha_formateada }}</td>
+              <td class="order-mesa">
+                <span class="mesa-badge" [class.to-go]="venta.mesa.toLowerCase().includes('llevar')">
+                  {{ venta.mesa }}
+                </span>
+              </td>
+              <td class="order-mesero">{{ venta.mesero }}</td>
+              <td class="order-total text-right">
+                <span class="amount">{{ formatearMoneda(venta.total) }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Mensaje si no hay ventas recientes -->
+        <div *ngIf="reporte.ultimasVentas.length === 0" class="no-transactions">
+          <i class="fas fa-inbox fa-3x mb-3"></i>
+          <h4>No hay movimientos hoy</h4>
+          <p>Las ventas del día aparecerán aquí</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

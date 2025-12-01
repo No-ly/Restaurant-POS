@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
-import { Categoria, Producto, Usuario, Ingrediente, PedidoRequest,  IngredienteProducto, PedidoCocina } from '../interfaces/api.interface';
+import { Categoria, Producto, Usuario, Ingrediente, PedidoRequest,  IngredienteProducto, PedidoCocina, ReporteDiario } from '../interfaces/api.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -64,5 +64,11 @@ getProductIngredients(productId: number): Observable<IngredienteProducto[]> {
   );
 }
 
+// Agregar este método en ApiService
+getReporteDiario(): Observable<ReporteDiario> {
+  return this.http.get<ReporteDiario>(`${this.baseUrl}/reportes/hoy`);
+}
 
 }
+
+
